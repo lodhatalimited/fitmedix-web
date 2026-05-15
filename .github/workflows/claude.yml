@@ -1,0 +1,77 @@
+name: Claude Auto-Implement
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  implement:
+    if: github.event.label.name == 'claude'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Create branch
+        id: branch
+        run: |
+          BRANCH="claude/issue-${{ github.event.issue.number }}"
+          git config user.name "claude-bot"
+          git config user.email "claude@fitmedix.com"
+          git checkout -b "$BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Run Claude on issue
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+          ISSUE_BODY="${{ github.event.issue.body }}"
+
+          claude --print "
+          You are working on the Fitmedix website (Next.js + Tailwind).
+
+          GitHub Issue #${{ github.event.issue.number }}: $ISSUE_TITLE
+
+          $ISSUE_BODY
+
+          Implement the requested changes. Follow existing code patterns and style.
+          Make minimal targeted changes. Do not add features beyond what is requested.
+          After making changes, run: git add -A && git commit -m 'feat: $ISSUE_TITLE (#${{ github.event.issue.number }})'
+          "
+
+      - name: Push branch
+        run: git push origin "${{ steps.branch.outputs.branch }}"
+
+      - name: Open Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "feat: ${{ github.event.issue.title }}" \
+            --body "Closes #${{ github.event.issue.number }}
+
+          Auto-implemented by Claude.
+
+          **Review checklist:**
+          - [ ] Check the Vercel preview URL
+          - [ ] Verify the change looks correct
+          - [ ] Approve and merge to deploy live" \
+            --base main \
+            --head "${{ steps.branch.outputs.branch }}"

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-slate-800 bg-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-teal px-6 py-3 rounded-lg text-white font-semibold text-sm hover:bg-teal-dark transition-colors duration-200;
+  }
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border-2 border-white px-6 py-3 rounded-lg text-white font-semibold text-sm hover:bg-white hover:text-navy transition-colors duration-200;
+  }
+  .prose-blog h2 {
+    @apply text-2xl font-bold text-navy mt-10 mb-4;
+  }
+  .prose-blog h3 {
+    @apply text-xl font-semibold text-navy mt-8 mb-3;
+  }
+  .prose-blog p {
+    @apply text-slate-700 leading-relaxed mb-5 text-base;
+  }
+  .prose-blog ul {
+    @apply list-disc list-inside space-y-2 mb-5 text-slate-700;
+  }
+  .prose-blog ol {
+    @apply list-decimal list-inside space-y-2 mb-5 text-slate-700;
+  }
+  .prose-blog strong {
+    @apply font-semibold text-slate-800;
+  }
+  .prose-blog a {
+    @apply text-teal underline hover:text-teal-dark;
+  }
+  .prose-blog blockquote {
+    @apply border-l-4 border-teal pl-4 italic text-slate-600 my-6;
+  }
+}
