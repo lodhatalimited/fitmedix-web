@@ -3,6 +3,9 @@ import BlogCard from '@/components/BlogCard'
 import EmailCapture from '@/components/EmailCapture'
 import { getAllPosts } from '@/lib/posts'
 
+const amazonImage = (asin: string) =>
+  `https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=${asin}&Format=_SL500_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=fitmedix-21`
+
 const PRODUCTS = [
   {
     name: 'Adhesive Dressing 80×150mm',
@@ -21,7 +24,7 @@ const PRODUCTS = [
     rating: 4.8,
     reviews: 364,
     tag: 'Top Rated',
-    asin: 'B0DC5R9CM3',
+    asin: 'B0DC5RCK98',
     gradient: 'from-navy to-navy-light',
   },
   {
@@ -31,7 +34,7 @@ const PRODUCTS = [
     rating: 4.6,
     reviews: 211,
     tag: 'Most Popular',
-    asin: 'B0DC5R9CM3',
+    asin: 'B0DZXW7969',
     gradient: 'from-cyan-700 to-teal',
   },
   {
@@ -199,8 +202,8 @@ export default async function HomePage() {
           <div className="relative h-[420px] hidden md:block animate-fade-up">
             {/* Stacked product cards mock */}
             <div className="absolute top-4 right-0 w-72 h-96 bg-white rounded-3xl shadow-card-hover p-5 rotate-3 origin-bottom-left">
-              <div className="h-48 bg-gradient-to-br from-teal to-cyan-600 rounded-2xl flex items-center justify-center">
-                <svg className="w-14 h-14 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 2v6m6-6v6M3 10h18M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+              <div className="h-48 bg-white rounded-2xl overflow-hidden flex items-center justify-center">
+                <img src={amazonImage('B0DC5R9CM3')} alt="Adhesive Dressing 80×150mm" className="h-full w-full object-contain" />
               </div>
               <div className="mt-4">
                 <span className="pill-teal text-[10px]">Best Seller</span>
@@ -213,8 +216,8 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="absolute top-16 left-0 w-64 h-80 bg-white rounded-3xl shadow-card-hover p-5 -rotate-6 origin-bottom-right">
-              <div className="h-40 bg-gradient-to-br from-navy to-teal-dark rounded-2xl flex items-center justify-center">
-                <svg className="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M12 8v8m-4-4h8M4 6h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+              <div className="h-40 bg-white rounded-2xl overflow-hidden flex items-center justify-center">
+                <img src={amazonImage('B0DZXW7969')} alt="Assorted Dressings" className="h-full w-full object-contain" />
               </div>
               <div className="mt-4">
                 <span className="pill-accent text-[10px]">Top Rated</span>
@@ -318,7 +321,13 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="group card overflow-hidden flex flex-col"
               >
-                <div className={`relative h-52 bg-gradient-to-br ${p.gradient}`}>
+                <div className={`relative h-52 bg-gradient-to-br ${p.gradient} overflow-hidden`}>
+                  <img
+                    src={amazonImage(p.asin)}
+                    alt={p.name}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain p-4 bg-white group-hover:scale-105 transition-transform duration-500"
+                  />
                   {p.tag && (
                     <span className="absolute top-3 left-3 pill-dark">
                       {p.tag}
@@ -330,11 +339,6 @@ export default async function HomePage() {
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                   </button>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-white/30 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 2v6m6-6v6M3 10h18M5 6h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z" />
-                    </svg>
-                  </div>
                 </div>
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="flex items-center gap-1.5 mb-2">
