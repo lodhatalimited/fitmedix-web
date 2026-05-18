@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,39 +9,106 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply font-sans text-slate-800 bg-white;
+    @apply font-sans text-ink-soft bg-white antialiased;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-ink;
+  }
+  ::selection {
+    @apply bg-teal/20 text-navy;
   }
 }
 
 @layer components {
+  /* Layout */
+  .container-x {
+    @apply max-w-7xl mx-auto px-5 sm:px-8;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 whitespace-nowrap;
+  }
   .btn-primary {
-    @apply inline-flex items-center gap-2 bg-teal px-6 py-3 rounded-lg text-white font-semibold text-sm hover:bg-teal-dark transition-colors duration-200;
+    @apply btn bg-navy text-white hover:bg-ink shadow-soft hover:shadow-card-hover;
+  }
+  .btn-accent {
+    @apply btn bg-accent text-white hover:bg-accent-dark shadow-soft hover:shadow-card-hover;
   }
   .btn-outline {
-    @apply inline-flex items-center gap-2 border-2 border-white px-6 py-3 rounded-lg text-white font-semibold text-sm hover:bg-white hover:text-navy transition-colors duration-200;
+    @apply btn border border-white/30 text-white hover:bg-white hover:text-navy;
   }
+  .btn-ghost {
+    @apply btn bg-white text-navy border border-slate-200 hover:border-navy hover:bg-slate-50;
+  }
+  .btn-teal {
+    @apply btn bg-teal text-white hover:bg-teal-dark shadow-soft;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white border border-slate-200/70 rounded-2xl shadow-soft hover:shadow-card-hover transition-all duration-300;
+  }
+
+  /* Pill / badge */
+  .pill {
+    @apply inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full;
+  }
+  .pill-teal {
+    @apply pill text-teal-dark bg-teal/10;
+  }
+  .pill-accent {
+    @apply pill text-accent-dark bg-accent/10;
+  }
+  .pill-dark {
+    @apply pill text-white bg-ink;
+  }
+  .pill-cream {
+    @apply pill text-navy bg-sand;
+  }
+
+  /* Eyebrow */
+  .eyebrow {
+    @apply inline-block text-[11px] font-bold tracking-[0.18em] uppercase;
+  }
+
+  /* Blog prose */
   .prose-blog h2 {
-    @apply text-2xl font-bold text-navy mt-10 mb-4;
+    @apply text-2xl md:text-3xl font-bold text-navy mt-12 mb-4;
   }
   .prose-blog h3 {
     @apply text-xl font-semibold text-navy mt-8 mb-3;
   }
   .prose-blog p {
-    @apply text-slate-700 leading-relaxed mb-5 text-base;
+    @apply text-ink-soft leading-[1.8] mb-5 text-base;
   }
   .prose-blog ul {
-    @apply list-disc list-inside space-y-2 mb-5 text-slate-700;
+    @apply list-disc list-outside pl-5 space-y-2 mb-5 text-ink-soft;
   }
   .prose-blog ol {
-    @apply list-decimal list-inside space-y-2 mb-5 text-slate-700;
+    @apply list-decimal list-outside pl-5 space-y-2 mb-5 text-ink-soft;
   }
   .prose-blog strong {
-    @apply font-semibold text-slate-800;
+    @apply font-semibold text-ink;
   }
   .prose-blog a {
-    @apply text-teal underline hover:text-teal-dark;
+    @apply text-teal underline decoration-teal/30 hover:decoration-teal underline-offset-4;
   }
   .prose-blog blockquote {
-    @apply border-l-4 border-teal pl-4 italic text-slate-600 my-6;
+    @apply border-l-4 border-teal pl-5 italic text-ink-mute my-6;
+  }
+
+  /* Decorative gradient backdrop */
+  .bg-radial-hero {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(8, 145, 178, 0.35), transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, rgba(6, 182, 212, 0.18), transparent 60%),
+      linear-gradient(135deg, #061322 0%, #0C2340 60%, #0E7490 140%);
+  }
+  .bg-cream-soft {
+    background:
+      radial-gradient(800px 400px at 100% 0%, rgba(8, 145, 178, 0.08), transparent 60%),
+      #FAF7F2;
   }
 }
