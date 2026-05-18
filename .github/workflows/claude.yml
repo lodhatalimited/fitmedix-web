@@ -8,9 +8,7 @@ on:
 
 jobs:
   implement:
-    if: |
-      (github.event_name == 'issues' && github.event.label.name == 'claude') ||
-      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/claude') && github.event.issue.pull_request == null)
+    if: ${{ (github.event_name == 'issues' && github.event.label.name == 'claude') || (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/claude') && !github.event.issue.pull_request) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
