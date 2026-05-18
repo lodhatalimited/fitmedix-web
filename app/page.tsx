@@ -3,34 +3,37 @@ import BlogCard from '@/components/BlogCard'
 import EmailCapture from '@/components/EmailCapture'
 import { getAllPosts } from '@/lib/posts'
 
+const amazonImage = (asin: string) =>
+  `https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=GB&ASIN=${asin}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_`
+
 const PRODUCTS = [
   {
     name: 'Adhesive Dressing 80x150mm',
     description: 'Pack of 10 sterile island dressings. Ideal for larger wounds, post-surgical sites, and limb injuries.',
     tag: 'Best Seller',
     asin: 'B0DC5R9CM3',
-    gradient: 'from-teal to-cyan-600',
+    image: amazonImage('B0DC5R9CM3'),
   },
   {
     name: 'Adhesive Dressing 80x100mm',
     description: 'Pack of 10 sterile wound dressings. Perfect for medium cuts, abrasions, and everyday first aid.',
     tag: 'Best Seller',
     asin: 'B0DC5R9CM3',
-    gradient: 'from-navy to-navy-light',
+    image: amazonImage('B0DC5R9CM3'),
   },
   {
     name: 'Assorted Dressings Pack of 36',
     description: 'Mixed sizes in one box. The smart choice for home first aid kits, workplaces, and care settings.',
     tag: 'Most Popular',
     asin: 'B0DC5R9CM3',
-    gradient: 'from-cyan-700 to-teal',
+    image: amazonImage('B0DC5R9CM3'),
   },
   {
     name: 'Adhesive Dressing 10x10cm',
     description: 'Pack of 50 square island dressings. Consistent size for repeat dressing changes on surgical wounds.',
     tag: '',
     asin: 'B0F5X725X7',
-    gradient: 'from-slate-700 to-navy',
+    image: amazonImage('B0F5X725X7'),
   },
 ]
 
@@ -147,18 +150,19 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
                 className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-teal/30 transition-all duration-300 flex flex-col"
               >
-                {/* Product image placeholder */}
-                <div className={`h-36 bg-gradient-to-br ${p.gradient} relative`}>
+                {/* Product image */}
+                <div className="h-44 bg-white relative flex items-center justify-center p-3">
                   {p.tag && (
-                    <span className="absolute top-3 left-3 text-xs font-bold bg-white text-navy px-2.5 py-1 rounded-full">
+                    <span className="absolute top-3 left-3 text-xs font-bold bg-navy text-white px-2.5 py-1 rounded-full z-10">
                       {p.tag}
                     </span>
                   )}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg className="w-12 h-12 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
-                    </svg>
-                  </div>
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
                   <h3 className="font-semibold text-navy text-sm leading-snug mb-2 group-hover:text-teal transition-colors">{p.name}</h3>
