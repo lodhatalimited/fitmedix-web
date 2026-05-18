@@ -24,25 +24,35 @@ jobs:
         with:
           node-version: 20
 
+      - name: Check if branch already exists with Claude's work
+        id: check
+        run: |
+          BRANCH="claude/issue-${{ github.event.issue.number }}"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          if git ls-remote --exit-code origin "$BRANCH"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Branch $BRANCH already exists — skipping Claude run"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install dependencies
+        if: steps.check.outputs.exists == 'false'
         run: npm ci
 
       - name: Install Claude Code CLI
+        if: steps.check.outputs.exists == 'false'
         run: npm install -g @anthropic-ai/claude-code
 
-      - name: Configure git
+      - name: Configure git and create branch
+        if: steps.check.outputs.exists == 'false'
         run: |
           git config user.name "claude-bot"
           git config user.email "claude@fitmedix.com"
-
-      - name: Create branch
-        id: branch
-        run: |
-          BRANCH="claude/issue-${{ github.event.issue.number }}"
-          git checkout -b "$BRANCH"
-          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          git checkout -b "${{ steps.check.outputs.branch }}"
 
       - name: Run Claude on issue
+        if: steps.check.outputs.exists == 'false'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,12 +71,14 @@ jobs:
           "
 
       - name: Push branch
-        run: git push origin "${{ steps.branch.outputs.branch }}"
+        if: steps.check.outputs.exists == 'false'
+        run: git push origin "${{ steps.check.outputs.branch }}"
 
       - name: Open Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git fetch origin "${{ steps.check.outputs.branch }}"
           gh pr create \
             --title "feat: ${{ github.event.issue.title }}" \
             --body "Closes #${{ github.event.issue.number }}
@@ -78,4 +90,5 @@ jobs:
           - [ ] Verify the change looks correct
           - [ ] Approve and merge to deploy live" \
             --base master \
-            --head "${{ steps.branch.outputs.branch }}"
+            --head "${{ steps.check.outputs.branch }}" \
+          || echo "PR may already exist"
