@@ -21,7 +21,7 @@ const PRODUCTS = [
     rating: 4.8,
     reviews: 364,
     tag: 'Top Rated',
-    asin: 'B0DC5R9CM3',
+    asin: 'B0DC5RCK98',
     gradient: 'from-navy to-navy-light',
   },
   {
@@ -31,7 +31,7 @@ const PRODUCTS = [
     rating: 4.6,
     reviews: 211,
     tag: 'Most Popular',
-    asin: 'B0DC5R9CM3',
+    asin: 'B0DZXW7969',
     gradient: 'from-cyan-700 to-teal',
   },
   {
