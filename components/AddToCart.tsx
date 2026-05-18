@@ -24,10 +24,10 @@ export default function AddToCart({ product }: { product: WebProduct }) {
   return (
     <button
       onClick={handleAdd}
-      className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+      className={`w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-soft hover:shadow-card-hover ${
         added
-          ? 'bg-green-500 text-white'
-          : 'bg-navy hover:bg-navy-light text-white'
+          ? 'bg-emerald-500 text-white'
+          : 'bg-navy hover:bg-ink text-white'
       }`}
     >
       {added ? (
