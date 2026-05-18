@@ -76,6 +76,14 @@ jobs:
             git checkout -b "$BRANCH"
           fi
 
+      - name: Post starting comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ steps.ctx.outputs.issue_number }} \
+            --repo ${{ github.repository }} \
+            --body "🤖 **Claude is on it.** Reading the codebase and implementing changes now... check the [Actions log](https://github.com/${{ github.repository }}/actions) for live output."
+
       - name: Run Claude
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -98,11 +106,12 @@ jobs:
         run: git push origin "${{ steps.check.outputs.branch }}"
 
       - name: Open or update Pull Request
+        id: pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git fetch origin "${{ steps.check.outputs.branch }}"
-          gh pr create \
+          PR_URL=$(gh pr create \
             --title "feat: ${{ steps.ctx.outputs.issue_title }}" \
             --body "Closes #${{ steps.ctx.outputs.issue_number }}
 
@@ -113,5 +122,18 @@ jobs:
           - [ ] Verify the change looks correct
           - [ ] Approve and merge to deploy live" \
             --base master \
-            --head "${{ steps.check.outputs.branch }}" \
-          || echo "PR already exists — branch updated"
+            --head "${{ steps.check.outputs.branch }}" 2>/dev/null) \
+          || PR_URL=$(gh pr view "${{ steps.check.outputs.branch }}" --repo ${{ github.repository }} --json url -q .url)
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+
+      - name: Post completion comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ steps.ctx.outputs.issue_number }} \
+            --repo ${{ github.repository }} \
+            --body "✅ **Claude finished.** Changes are ready for review.
+
+          👉 [View Pull Request](${{ steps.pr.outputs.pr_url }})
+
+          Vercel will generate a preview URL on the PR — check it before merging to go live."
